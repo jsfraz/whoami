@@ -1,26 +1,24 @@
 package main
 
 import (
-  "os"
-  "fmt"
-  "net/http"
-  "log"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
 )
 
 func main() {
-    port := os.Getenv("PORT")
-    if port == "" {
-        port = "8080"
-    }
+	hostname := os.Getenv("VIRTUAL_HOST")
+	if hostname == "" {
+		fmt.Fprintf(os.Stdout, "VIRTUAL_HOST is empty! Shutting down...")
+		os.Exit(1)
+	}
+	fmt.Fprintf(os.Stdout, "Listening on :8080\n")
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(os.Stdout, "I'm %s\n", hostname)
+		body := "<!DOCTYPE html><html><head><title>" + hostname + "</title></head><body><center><h1>Welcome to " + hostname + "!</h1></center></body></html>"
+		fmt.Fprintf(w, body)
+	})
 
-    fmt.Fprintf(os.Stdout, "Listening on :%s\n", port)
-    hostname, _ := os.Hostname()
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        fmt.Fprintf(os.Stdout, "I'm %s\n", hostname)
- 	fmt.Fprintf(w, "I'm %s\n", hostname)
-    })
-
-
-    log.Fatal(http.ListenAndServe(":" + port, nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
-

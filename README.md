@@ -1,10 +1,5 @@
-whoami
-======
+# whoami
 
-Simple HTTP docker service that prints it's container ID
+Container displaying VIRTUAL_HOST environment variable. For [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) testing purposes.
 
-    $ docker run -d -p 8000:8000 --name whoami -t jwilder/whoami
-    736ab83847bb12dddd8b09969433f3a02d64d5b0be48f7a5c59a594e3a6a3541
-    
-    $ curl $(hostname --all-ip-addresses | awk '{print $1}'):8000
-    I'm 736ab83847bb
+Just run `sudo docker build . -t jsfraz/whoami:latest` to build an image, start container by `sudo docker run -d --name whoami -e VIRTUAL_HOST=example.com -e VIRTUAL_PORT=8080 jsfraz/whoami:latest` and open `example.com` in browser:
